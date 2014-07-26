@@ -15,22 +15,22 @@
  *  with Airport Simulator.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class Location {
+class Vec3 {
 
     public float x;
     public float y;
-    public float angle;
+    public float z;
 
-    Location() {
+    Vec3() {
         x = 0.0f;
         y = 0.0f;
-        angle = 0.0f;
+        z = 0.0f;
     }
 
-    Location(float x, float y, float angle) {
+    Vec3(float x, float y, float z) {
         this.x = x;
         this.y = y;
-        this.angle = angle;
+        this.z = z;
     }
 }
 

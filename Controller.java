@@ -30,7 +30,7 @@ class Controller {
 
     PApplet app;
     Physics physics;
-    Location [] locations;
+    Vec3 [] locations;
     Airplane [] airplanes;
 
     private int [] seconds = { 180, 120, 60 }; // the number of second of each phase
@@ -38,7 +38,7 @@ class Controller {
     private int phase, tics, secs;
     private Boolean actionPending;
 
-    Controller(PApplet app, Physics physics, Location [] locations, Airplane [] airplanes) {
+    Controller(PApplet app, Physics physics, Vec3 [] locations, Airplane [] airplanes) {
         this.app = app;
         this.physics = physics;
         this.locations = locations;
@@ -72,10 +72,10 @@ class Controller {
             actionPending = ! insertAirplane();
     }
 
-    public Boolean checkFlight(Airplane airplane, Vec2 pos, Location flightArea, float impulse) {
+    public Boolean checkFlight(Airplane airplane, Vec2 pos, Vec3 flightArea, float impulse) {
         if(app.dist(flightArea.x, flightArea.y, pos.x, pos.y) < Airplane.Size.BIG.get()*0.8) {
             // nice discovery: the angle must be checked against the last one before the collision!!!
-            if(Math.abs(airplane.lastAngle - flightArea.angle) < 0.1f) {
+            if(Math.abs(airplane.lastAngle - flightArea.z) < 0.1f) {
                 if(impulse > airplane.size.get()*1.3f) {
                     Helper.message("Good flight!");
                     airplane.flight();

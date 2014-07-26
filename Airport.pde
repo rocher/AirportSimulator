@@ -34,10 +34,10 @@ import ddf.minim.effects.*;
 Physics physics;
 CollisionDetector detector;
 
-Location [] locations;
+Vec3 [] locations;
 Airplane [] airplanes;
-Location [] throttleArea;
-Location [] flightArea;
+Vec3 [] throttleArea;
+Vec3 [] flightArea;
 
 PImage airport;
 PImage airportNight;
@@ -65,16 +65,16 @@ void setup()
   physics.setCustomRenderingMethod(this, "airportRenderer");
   physics.setDensity(10.0);
 
-  locations = new Location[9];
-  locations[0] = new Location(969,  64, 3.599);
-  locations[1] = new Location(566,  70, 5.149);
-  locations[2] = new Location(423, 718, 5.969);
-  locations[3] = new Location( 86, 579, 5.157);
-  locations[4] = new Location(305, 749, 0.444);
-  locations[5] = new Location(401, 316, 3.568);
-  locations[6] = new Location(200, 405, 3.568);
-  locations[7] = new Location(818, 122, 3.568);
-  locations[8] = new Location(342, 200, 3.568);
+  locations = new Vec3[9];
+  locations[0] = new Vec3(969,  64, 3.599);
+  locations[1] = new Vec3(566,  70, 5.149);
+  locations[2] = new Vec3(423, 718, 5.969);
+  locations[3] = new Vec3( 86, 579, 5.157);
+  locations[4] = new Vec3(305, 749, 0.444);
+  locations[5] = new Vec3(401, 316, 3.568);
+  locations[6] = new Vec3(200, 405, 3.568);
+  locations[7] = new Vec3(818, 122, 3.568);
+  locations[8] = new Vec3(342, 200, 3.568);
 
 
   Airplane.init(this);
@@ -82,32 +82,18 @@ void setup()
   for(int i = 0; i < airplanes.length; i++)
     airplanes[i] = new Airplane(this, physics, i);
 
-  throttleArea = new Location[2];
-  throttleArea[0] = new Location(130, 674, 66); // the angle is used as a radius
-  throttleArea[1] = new Location(514, 749, 50);
+  throttleArea = new Vec3[2];
+  throttleArea[0] = new Vec3(130, 674, 66);
+  throttleArea[1] = new Vec3(514, 749, 50);
 
-  flightArea = new Location[2];
-  flightArea[0] = new Location(1153, 204, 0.43); // dist(1153,204, 1199,188));
-  flightArea[1] = new Location(755, 35, 1.25); // dist(755,35, 770,0));
-
- //  airplanes[0].startAt(locations[4]);
-  //.del airplanes[1] = new Airplane(physics, locations[1], Airplane.Size.MEDIUM, Airplane.Color.GREEN);
-  //.del airplanes[2] = new Airplane(physics, locations[2], Airplane.Size.SMALL, Airplane.Color.BLUE);
-  //.del airplanes[3] = new Airplane(physics, locations[3], Airplane.Size.BIG, Airplane.Color.CYAN);
-  //.del airplanes[4] = new Airplane(physics, locations[4], Airplane.Size.MEDIUM, Airplane.Color.YELLOW);
-  //.del airplanes[5] = new Airplane(physics, locations[5], Airplane.Size.SMALL, Airplane.Color.MAGENTA);
-  //.del airplanes[6] = new Airplane(physics, locations[6], Airplane.Size.BIG, Airplane.Color.BLACK);
-  //.del airplanes[7] = new Airplane(physics, locations[7], Airplane.Size.MEDIUM, Airplane.Color.WHITE);
-  //.del airplanes[8] = new Airplane(physics, locations[8], Airplane.Size.SMALL, Airplane.Color.WHITE);
+  flightArea = new Vec3[2];
+  flightArea[0] = new Vec3(1153, 204, 0.43); // dist(1153,204, 1199,188));
+  flightArea[1] = new Vec3(755, 35, 1.25); // dist(755,35, 770,0));
 
   detector = new CollisionDetector (physics, this);
 
   helper = new Helper(this, physics);
   controller = new Controller(this, physics, locations, airplanes);
-  // float dens = physics.getDensity();
-  // physics.setDensity(0);
-  // controller.start();
-  // physics.setDensity(dens);
 }
 
 void draw()
@@ -146,22 +132,22 @@ void draw()
   // text meesages and help
   helper.draw();
 
-  // throttle areas
+  /**-/ // throttle areas
   if(Helper.night < 128) {
     fill(255, 99, 99, 128);
     noStroke();
     // quad(99,652, 132,639, 157,696, 129,713);
     // quad(498,727, 540,742, 532,774, 486,758);
-    ellipse(throttleArea[0].x, throttleArea[0].y, throttleArea[0].angle, throttleArea[0].angle);
-    ellipse(throttleArea[1].x, throttleArea[1].y, throttleArea[1].angle, throttleArea[1].angle);
+    ellipse(throttleArea[0].x, throttleArea[0].y, throttleArea[0].z, throttleArea[0].z);
+    ellipse(throttleArea[1].x, throttleArea[1].y, throttleArea[1].z, throttleArea[1].z);
   }
+  /**/
 
-  // exit areas
-  /**
+  /**-/ // exit areas
   fill(99, 99, 255, 128);
   noStroke();
-  ellipse(flightArea[0].x, flightArea[0].y, flightArea[0].angle, flightArea[0].angle*1.5);
-  ellipse(flightArea[1].x, flightArea[1].y, flightArea[1].angle*1.5, flightArea[1].angle);
+  ellipse(flightArea[0].x, flightArea[0].y, flightArea[0].z, flightArea[0].z*1.5);
+  ellipse(flightArea[1].x, flightArea[1].y, flightArea[1].z*1.5, flightArea[1].z);
   /**/
 
   // game actions ...

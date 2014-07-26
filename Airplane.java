@@ -67,7 +67,7 @@ class Airplane
         reset();
     }
 
-    public void startAt(Location loc) {
+    public void startAt(Vec3 loc) {
         if(!jetSnd.isPlaying()) {
             jetSnd.play();
             jetSnd.loop();
@@ -78,7 +78,7 @@ class Airplane
         size = Airplane.randomSize();
         color = Airplane.randomColor();
         Airplane.counter++;
-        fuselage.setAngle(loc.angle);
+        fuselage.setAngle(loc.z);
         reset();
         incVelocity(0.5f);
 
@@ -105,7 +105,7 @@ class Airplane
         }
     }
 
-    public void draw(Location [] throttleArea) {
+    public void draw(Vec3 [] throttleArea) {
         if(toExplode) {
             if(explosionCounter == 0) {
                 if(throttling)
@@ -137,7 +137,7 @@ class Airplane
 
         for(int i = 0; i < throttleArea.length; i++) {
             float d = app.dist(pos.x, pos.y, throttleArea[i].x, throttleArea[i].y);
-            if(d < throttleArea[i].angle/2)
+            if(d < throttleArea[i].z/2)
                 canSpeed = true;
         }
 
