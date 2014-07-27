@@ -33,7 +33,9 @@ class Airplane
 {
     public enum Size {
         BIG(85),
+        MEDIUM_BIG(80),
         MEDIUM(75),
+        MEDIUM_SMALL(70),
         SMALL(60);
 
         Size(float pixels) { this.pixels = pixels; }
@@ -339,10 +341,12 @@ class Airplane
 
     public static Airplane.Size randomSize() {
         Airplane.Size size = Airplane.Size.SMALL;
-        switch((int)Math.floor(Math.random()*3)) {
-        case 0: size = Airplane.Size.SMALL; break;
-        case 1: size = Airplane.Size.MEDIUM; break;
-        case 2: size = Airplane.Size.BIG; break;
+        switch((int)Math.floor(Math.random()*5)) {
+        case 0: size = Airplane.Size.SMALL; break; 
+        case 1: size = Airplane.Size.MEDIUM_SMALL; break;
+        case 2: size = Airplane.Size.MEDIUM; break;
+        case 3: size = Airplane.Size.MEDIUM_BIG; break;
+        case 4: size = Airplane.Size.BIG; break;
         }
         return size;
     }
