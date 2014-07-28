@@ -61,28 +61,55 @@ class Controller {
         jetSnd.loop();
     }
 
+    //q.tip {BEGIN: Game Control}
+    //q
+    //q.sse Game Control
+    //q
+    //q This method is the responsible for airplanes to appear. Each game
+    //q phase has a time duration in which airplanes appear with a given
+    //q frequency.
+    //q
     public void act() {
         if(Airplane.counter == 0 || actionPending) {
             insertAirplane();
             return;
         }
 
-        if(++tics % 60 != 0) return; // act each second
+        if(++tics < 60) return; // game actions take place per second basis
 
         tics = 0;
         if(phase < seconds.length-1 && ++secs == seconds[phase]) {
             phase++;
-            app.println("phase = " + phase + ", new airplane every " + rate[phase] + " seconds");
+            // app.println("phase = " + phase + ", new airplane every " + rate[phase] + " seconds");
         }
 
         if(secs % rate[phase] == 0)
             actionPending = ! insertAirplane();
     }
+    //q.tip {END}
 
-    public Boolean checkFlight(Airplane airplane, Vec2 pos, Vec3 flightArea, float impulse) {
+    //q.tip {BEGIN: Check Flight}
+    //q
+    //q.sse Check Flight
+    //q
+    //q This method is in charge to decide whether planes can take off or must
+    //q explode when they collide against of the {e/flight areas}. Three conditions
+    //q must be met:
+    //q
+    //q.li1 The collision point must be within the {e/flight area}, defined as a
+    //q.li1 circle with its center in the intersection between the middle
+    //q.li1 line of the runway and the screen margin.
+    //q
+    //q.li1 The angle must be near the runway angle.
+    //q
+    //q.li1 The impulse of the collision is proportional to the airplane
+    //q.li1 size.
+    //q
+    public Boolean checkFlight(Airplane airplane, Vec2 pos,
+                               Vec3 flightArea, float impulse) {
         if(app.dist(flightArea.x, flightArea.y, pos.x, pos.y) < Airplane.Size.BIG.get()*0.8) {
             // nice discovery: the angle must be checked against the last one before the collision!!!
-            if(Math.abs(airplane.lastAngle - flightArea.z) < 0.1f) {
+            if(app.abs(airplane.lastAngle - flightArea.z) < 0.1f) {
                 if(impulse > airplane.size.get()*1.3f) {
                     Helper.message("Good flight!");
                     airplane.flight();
@@ -95,6 +122,7 @@ class Controller {
         else Helper.message("OUT OF BOUNDS");
         return false;
     }
+    //q.tip {END}
 
     private Boolean insertAirplane() {
         int loc = freeLocation();
@@ -141,3 +169,10 @@ class Controller {
         return -1;
     }
 }
+
+//q.cfg.mode Local Variables:
+//q.cfg.mode qwe-delimiter-tag: "q"
+//q.cfg.mode qwe-show-delimiters: invisible
+//q.cfg.mode mode: java
+//q.cfg.mode mode: qwe
+//q.cfg.mode End:

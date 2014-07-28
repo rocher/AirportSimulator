@@ -15,6 +15,14 @@
  *  with Airport Simulator.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//.tip {BEGIN: Vec3}
+//
+//.sec Class Vec3
+//
+// This is a class to store three float values. It serves indifferently to
+// store a point {t/(x, y, z)}, point + angle {t/(x, y, angle)} or point + radius
+// {t/(x, y, radius)} information.
+//
 class Vec3 {
 
     public float x;
@@ -34,3 +42,11 @@ class Vec3 {
     }
 }
 
+//.tip {END}
+
+//.cfg.mode Local Variables:
+//.cfg.mode qwe-delimiter-tag: ""
+//.cfg.mode qwe-show-delimiters: invisible
+//.cfg.mode mode: java
+//.cfg.mode mode: qwe
+//.cfg.mode End:

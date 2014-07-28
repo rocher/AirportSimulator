@@ -29,8 +29,20 @@ import ddf.minim.*;
 import processing.core.PImage;
 import processing.core.PApplet;
 
+//q.sec Class Airplane
+//q
+//q Objects of this class are the airplanes of the game. There is a set of common
+//q data used by all airplanes in the {e/static section} of the class. 
+//q
 class Airplane
 {
+    //q.tip {BEGIN: Airplane.Size}
+    //q
+    //q.sse Airplane Size
+    //q
+    //q These are all the possible sizes for airplanes. Each size represents
+    //q the size in pixels of the common airplane image used.
+    //q
     public enum Size {
         BIG(85),
         MEDIUM_BIG(80),
@@ -42,7 +54,16 @@ class Airplane
         public float get() { return pixels; }
         private final float pixels;
     };
+    //q.tip {END}
 
+    //q.tip {BEGIN: Airplane.Color}
+    //q
+    //q.sse Airplane Color
+    //q
+    //q These are all possible colors for airplanes. Currently a new color
+    //q scheme is needed because this is a bit ugly. Only white, yellow and
+    //q black airplanes are used.
+    //q
     public enum Color {
         WHITE(0xffffffff),
         RED(0xffff3333),
@@ -57,6 +78,7 @@ class Airplane
         public int get() { return rgb; }
         private final int rgb;
     };
+    //q.tip {END}
 
     Airplane(PApplet a, Physics p, int i) {
         app = a;
@@ -366,3 +388,10 @@ class Airplane
         return color;
     }
 }
+
+//q.cfg.mode Local Variables:
+//q.cfg.mode qwe-delimiter-tag: "q"
+//q.cfg.mode qwe-show-delimiters: invisible
+//q.cfg.mode mode: java
+//q.cfg.mode mode: qwe
+//q.cfg.mode End:

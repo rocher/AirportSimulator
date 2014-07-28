@@ -67,6 +67,23 @@ void setup()
 
   detector = new CollisionDetector (physics, this);
 
+  //q.tip {BEGIN: Airport Layout}
+  //q
+  //q.sse Airport Layout
+  //q
+  //q In case a new class {t/Airport} is created, this information defines each
+  //q airport layout. contained here are:
+  //q
+  //q.li1 {b/Airplanes locations} Locations in the ground in which airplanes can
+  //q.li1 safely appear.
+  //q
+  //q.li1 {b/Throttle areas} Those areas in the runway head, that must be stepped
+  //q.li1 over by airplanes for them to throttle.
+  //q
+  //q.li1 {b/Take off areas} Those areas defined by the intersection of the
+  //q.li1 runway and the screen corner by which airplanes leave the screen.
+
+  // Locations are defined by (x, y, z): a point (x, y) + an angle z
   locations = new Vec3[9];
   locations[0] = new Vec3(969,  64, 3.599);
   locations[1] = new Vec3(566,  70, 5.149);
@@ -78,17 +95,21 @@ void setup()
   locations[7] = new Vec3(818, 122, 3.568);
   locations[8] = new Vec3(342, 200, 3.568);
 
-  airplanes = new Airplane[9];
-  for(int i = 0; i < airplanes.length; i++)
-    airplanes[i] = new Airplane(this, physics, i);
-
+  // Throttle areas are defined by (x, y, z): a point (x, y) + a radius z
   throttleArea = new Vec3[2];
   throttleArea[0] = new Vec3(130, 674, 66);
   throttleArea[1] = new Vec3(514, 749, 50);
 
+  // Take off areas are defined by (x, y, z): a point (x, y) + an angle z
   flightArea = new Vec3[2];
-  flightArea[0] = new Vec3(1153, 204, 0.43); // dist(1153,204, 1199,188));
-  flightArea[1] = new Vec3(755, 35, 1.25); // dist(755,35, 770,0));
+  flightArea[0] = new Vec3(1153, 204, 0.43);
+  flightArea[1] = new Vec3(755, 35, 1.25);
+
+  //q.tip {END}
+
+  airplanes = new Airplane[9];
+  for(int i = 0; i < airplanes.length; i++)
+    airplanes[i] = new Airplane(this, physics, i);
 
   helper = new Helper(this, physics);
   controller = new Controller(this, physics, locations, airplanes, helper);
@@ -143,7 +164,7 @@ void draw()
   }
   /**/
 
-  /**-/ // exit areas
+  /**-/ // take off areas
   fill(99, 99, 255, 128);
   noStroke();
   ellipse(flightArea[0].x, flightArea[0].y, flightArea[0].z, flightArea[0].z*1.5);
@@ -275,18 +296,38 @@ void keyReleased(KeyEvent event) {
   }
 }
 
+//q.tip {BEGIN: Collision Detector}
+//q
+//q.sse Collision Detector
+//q
+//q This method is in charge to decide what happens when collisions ocurs. If
+//q a {e/special} case is detected, then the method {t/Controller.checkFlight} is
+//q used to decide whether an airplane can take off or must explode.
+//q
 void collision(Body b1, Body b2, float impulse)
 {
+  // Airplane index, in case Body b1 or b2 is an airplane.
   int idx1 = -1;
   int idx2 = -1;
+
+  // Positions of Body objects
   Vec2 p1 = physics.worldToScreen(b1.getWorldCenter());
   Vec2 p2 = physics.worldToScreen(b2.getWorldCenter());
 
-  // airplanes have user data = airplanes index
+  // NOTE: It would be really useful if Physics class could use the method
+  // Body.setUserData to add the name on each wall, eg.
+  //
+  //    result[o].setUserData(new String("left"));  // see Physics.java, line 341, createHollowBox
+  //    result[1].setUserData(new String("right"));
+  //    result[2].setUserData(new String("bottom"));
+  //    result[3].setUserData(new String("top"));
+  //
+  // Our airplanes have user data == airplane index
+  //
   if(b1.getUserData() != null) idx1 = (Integer) b1.getUserData();
   if(b2.getUserData() != null) idx2 = (Integer) b2.getUserData();
 
-  /**/ // Collision info
+  /**-/ // Collision info
   println("COLLISION " +
           "b1[" + idx1 + "]@(" + p1.x + "," + p1.y + ") * " +
           "b2[" + idx2 + "]@(" + p2.x + "," + p2.y + ") = " + impulse);
@@ -300,7 +341,10 @@ void collision(Body b1, Body b2, float impulse)
     return;
   }
 
-  // agains right wall  (walls are always in  Body b1)
+  // NOTE: the next two sections should depend on airport layout and take off
+  // areas.
+  //
+  // airplane agains right wall  (walls are always in Body b1)
   if(abs(p1.x - width) < 0.01f && abs(p1.y - height/2) < 0.01f) {
     if(controller.checkFlight(airplanes[idx2], p2, flightArea[0], impulse)) {
       if(P == idx2) P = -1;
@@ -308,7 +352,7 @@ void collision(Body b1, Body b2, float impulse)
     }
   }
 
-  //against top wall
+  // ariplane against top wall
   if(abs(p1.x - width/2) < 0.01f && abs(p1.y) < 0.01f) {
     if(controller.checkFlight(airplanes[idx2], p2, flightArea[1], impulse)) {
       if(P == idx2) P = -1;
@@ -329,3 +373,13 @@ void collision(Body b1, Body b2, float impulse)
     if(P == idx2) P = -1;
   }
 }
+
+//q.tip {END}
+
+
+//q.cfg.mode Local Variables:
+//q.cfg.mode qwe-delimiter-tag: "q"
+//q.cfg.mode qwe-show-delimiters: invisible
+//q.cfg.mode mode: processing
+//q.cfg.mode mode: qwe
+//q.cfg.mode End:
