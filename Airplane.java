@@ -70,10 +70,6 @@ class Airplane
     }
 
     public void startAt(Vec3 loc) {
-        if(!jetSnd.isPlaying()) {
-            jetSnd.play();
-            jetSnd.loop();
-        }
         if(fuselage != null) remove();
         fuselage = physics.createCircle(loc.x, loc.y, size.get()/2);
         fuselage.setUserData(idx);
@@ -282,24 +278,30 @@ class Airplane
         fuselage.applyImpulse(impulse, fuselage.getWorldCenter());
     }
 
+    //q.tip {BEGIN: Airplane Members}
+    //q
+    //q.sse Airplane Members
+    //q
     private PApplet app;
     private Physics physics;
 
-    public int idx;
+    public int idx;		// The index in the global array
     public Size size;
     public Color color;
-    public Body fuselage;
+    public Body fuselage;	// The real physical body/representation
     public float velocity;
     public Boolean selected;
-    public Boolean toFligh;
-    public Boolean toExplode;
-    public Boolean canSpeed;
-    public Boolean throttling;
+    public Boolean toFligh;	// Next action: take off, leave the screen
+    public Boolean toExplode;	// Next action: explode
+    public Boolean canSpeed;	// Stepped over the head of the runway
+    public Boolean throttling;	// Current action: throttling
     public int explosionCounter;
-    public Vec2 lastPos;
-    public float lastAngle;
-    private int lightTopCounter = 0;
-    private int lightTailCounter = 0;
+    public Vec2 lastPos;	// Last position before collision + explosion
+    public float lastAngle;	// Last angle before collision
+    private int lightTopCounter = 0;	// To blink top light
+    private int lightTailCounter = 0;	// To blink tail light
+
+    //q.tip {END}
 
     // Static stuff
 
@@ -309,7 +311,6 @@ class Airplane
     private static PImage lightTop;
     private static PImage lightTail;
     private static PImage [] explosions;
-    private static Minim minim;
     private static AudioPlayer trafficSnd;
     private static AudioPlayer explosionSnd;
     private static AudioPlayer jetSnd;
@@ -332,11 +333,10 @@ class Airplane
         }
 
         // sound
-        minim = new Minim(app);
-        trafficSnd = minim.loadFile("traffic.wav");
-        explosionSnd = minim.loadFile("explosion.wav");
-        jetSnd = minim.loadFile("jet.wav");
-        throttleSnd = minim.loadFile("throttle.wav");
+        trafficSnd = Helper.minim.loadFile("traffic.wav");
+        explosionSnd = Helper.minim.loadFile("explosion.wav");
+        jetSnd = Helper.minim.loadFile("jet.wav");
+        throttleSnd = Helper.minim.loadFile("throttle.wav");
     }
 
     public static Airplane.Size randomSize() {

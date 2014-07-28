@@ -24,6 +24,8 @@ import org.jbox2d.dynamics.joints.*;
 import org.jbox2d.p5.*;
 import org.jbox2d.dynamics.*;
 
+import ddf.minim.*;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -33,8 +35,15 @@ class Helper {
         this.app = app;
         this.font = app.loadFont("CourierNewPS-BoldMT-16.vlw");
 
+        Helper.minim = new Minim(app);
+
         float dens = physics.getDensity();
         physics.setDensity(0);
+
+        // This is specific to each airport layout, in case Airport is a
+        // class to implement several game screens in different airports.
+        // The idea is to delimit those areas that cannot be traversed by
+        // airplanes.
         this.area = physics.createRect(660, 520, app.width-10, app.height-10);
         physics.setDensity(dens);
 
@@ -127,18 +136,18 @@ class Helper {
         app.println("MSG: " + msg);
     }
 
-    private static PApplet app;
-    private static PFont font;
     public Boolean help = true;
-
     private Body area;
 
+    public static Minim minim;
     public static int score = 0;
     public static int explosions = 0;
     public static int flights = 0;
     public static int night = 0;
     public static int nightStep = 0;
 
+    private static PApplet app;
+    private static PFont font;
     private static String message= "";
     private static int msg_counter = 0;
 }

@@ -65,6 +65,8 @@ void setup()
   physics.setCustomRenderingMethod(this, "airportRenderer");
   physics.setDensity(10.0);
 
+  detector = new CollisionDetector (physics, this);
+
   locations = new Vec3[9];
   locations[0] = new Vec3(969,  64, 3.599);
   locations[1] = new Vec3(566,  70, 5.149);
@@ -76,8 +78,6 @@ void setup()
   locations[7] = new Vec3(818, 122, 3.568);
   locations[8] = new Vec3(342, 200, 3.568);
 
-
-  Airplane.init(this);
   airplanes = new Airplane[9];
   for(int i = 0; i < airplanes.length; i++)
     airplanes[i] = new Airplane(this, physics, i);
@@ -90,10 +90,10 @@ void setup()
   flightArea[0] = new Vec3(1153, 204, 0.43); // dist(1153,204, 1199,188));
   flightArea[1] = new Vec3(755, 35, 1.25); // dist(755,35, 770,0));
 
-  detector = new CollisionDetector (physics, this);
-
   helper = new Helper(this, physics);
-  controller = new Controller(this, physics, locations, airplanes);
+  controller = new Controller(this, physics, locations, airplanes, helper);
+
+  Airplane.init(this);
 }
 
 void draw()

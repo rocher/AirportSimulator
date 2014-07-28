@@ -24,6 +24,8 @@ import org.jbox2d.dynamics.joints.*;
 import org.jbox2d.p5.*;
 import org.jbox2d.dynamics.*;
 
+import ddf.minim.*;
+
 import processing.core.PApplet;
 
 class Controller {
@@ -32,17 +34,20 @@ class Controller {
     Physics physics;
     Vec3 [] locations;
     Airplane [] airplanes;
+    AudioPlayer jetSnd;
 
     private int [] seconds = { 180, 120, 60 }; // the number of second of each phase
     private int [] rate = { 20, 10, 5 }; // == x : new airplanes / x seconds
     private int phase, tics, secs;
     private Boolean actionPending;
 
-    Controller(PApplet app, Physics physics, Vec3 [] locations, Airplane [] airplanes) {
+    Controller(PApplet app, Physics physics, Vec3 [] locations, Airplane [] airplanes, Helper hlp) {
         this.app = app;
         this.physics = physics;
         this.locations = locations;
         this.airplanes = airplanes;
+
+        jetSnd = hlp.minim.loadFile("jet.wav");
 
         phase = 0;
         tics = 0;
@@ -52,6 +57,8 @@ class Controller {
 
     public void start() {
         airplanes[0].startAt(locations[5]);
+        jetSnd.play();
+        jetSnd.loop();
     }
 
     public void act() {
